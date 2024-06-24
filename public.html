@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,viewport-fit=cover">
+    <title>蓝牙串口监控</title>
+    <link rel="stylesheet" href="./public/css/weui.css"/>
+    <link rel="stylesheet" href="./public/css/index.css"/>
+</head>
+<body ontouchstart>
+    <div class="container" id="container"></div>
+
+    <script type="text/html" id="tpl_home">
+<div class="page">
+    <div class="page__bd">
+        <div class="weui-cells">
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <p>DCP</p>
+                    <p style="font-size: 13px;color: #888888;">单位：</p>
+                </div>
+            </div>
+            <div class="weui-cell weui-cell_access">
+                <div class="weui-cell__bd">
+                    <p>GPS</p>
+                    <p style="font-size: 13px;color: #888888;">单行列表</p>
+                </div>
+                <div class="weui-cell__ft"></div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!--  footer  -->
+            <div class="weui-tabbar">
+                <a href="./user.html" class="weui-tabbar__item">
+                    <p class="weui-tabbar__label">DCP状态</p>
+                </a>
+                <!-- <a href="javascript:;" class="weui-tabbar__item weui-bar__item_on"> -->
+                    <a href="./gps.html" class="weui-tabbar__item">  
+                    <p class="weui-tabbar__label">GPS查询</p>
+                </a>
+                <a href="./relocation.html" class="weui-tabbar__item">
+                    <p class="weui-tabbar__label">DCP配置</p>
+                </a>
+                <a href="./rent.html" class="weui-tabbar__item">
+                    <p class="weui-tabbar__label">升级</p>
+                </a>
+            </div>
+    <!--  footer  -->
+
+
+
+
+
+    <!-- <div class="page__ft">
+        <a href="javascript:home()"><img src="./public/images/icon_footer.png" /></a>
+    </div> -->
+
+    <!-- loading toast -->
+    <div id="loadingToast" style="display:none;">
+        <div class="weui-mask_transparent"></div>
+        <div class="weui-toast">
+            <i class="weui-loading weui-icon_toast"></i>
+            <p class="weui-toast__content">数据加载中</p>
+        </div>
+    </div>
+
+
+
+</div>
+
+</script>
+
+    <script src="./public/js/zepto.min.js"></script>
+    <script src="./public/js/jweixin-1.0.0.js"></script>
+    <script src="./public/js/weui.min.js"></script>
+    <script src="./public/js/index.js"></script>
+
+    <script type="text/javascript">
+    $(function(){
+        var page = 1;
+        var page_size = 8;
+        getAjaxRes();
+
+        $('.weui-tabbar__item').on('click', function () {
+            var href = $(this).attr('href');
+            location.href=href;
+        });
+
+        function getAjaxRes(){
+            var name = $('.name').val();
+            var pwd = $('.pwd').val();
+            $.ajax({
+                type: "POST",
+                url: "http://127.0.0.1/ppp.php",
+                data: {'NAME':name,'PWD':pwd},
+                dataType:"json",
+                beforeSend: loadingtoast,
+                success: function(res){
+                    if (res.code=='200') {
+                        alert(0);
+                    } else if(res.code=='202') {
+                        alert(res.message);
+                    }
+                }
+            });
+        }
+        function loadingtoast(){
+            var $loadingToast = $('#loadingToast');
+            if ($loadingToast.css('display') != 'none') return;
+            $loadingToast.fadeIn(100);
+            setTimeout(function () {
+                $loadingToast.fadeOut(100);
+            }, 500);
+        }
+
+        
+    });
+    </script>
+</body>
+</html>
